@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SlideRefreshLayout">
+        <attr name="sliding_resistivity" format="float" />
+        <attr name="overstep_resistivity" format="float" />
+        <attr name="overstep" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="SlideRefreshLayout_Layout">
+        <attr name="layout_slide_threshold" format="float" />
+        <attr name="layout_direction" format="enum">
+            <enum name="non" value="0" />
+            <enum name="left" value="1" />
+            <enum name="top" value="2" />
+            <enum name="right" value="3" />
+            <enum name="bottom" value="4" />
+        </attr>
+        <attr name="layout_slide_type" format="enum">
+            <enum name="refresh" value="0" />
+            <enum name="append" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

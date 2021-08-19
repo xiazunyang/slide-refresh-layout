@@ -1,0 +1,3 @@
+package cn.numeron.sliderefreshlayout
+
+interface SlidingView : SlideRefreshLayout.OnSlidingListener
