@@ -81,7 +81,7 @@
         <Your view implements SlidingView
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            app:layout_direction="top"
+            app:layout_direction="bottom"
             app:layout_slide_type="append"
             ... />
 
@@ -89,16 +89,16 @@
    ```
 
 3. 添加监听器
-    ```kotlin
+   ```kotlin
         //添加刷新监听
-        slideRefreshLayout.onRefreshListener = SlideRefreshLayout.OnRefreshListener {
-            //do refresh
-        }
-        //添加追加监听
-        slideRefreshLayout.onAppendListener = SlideRefreshLayout.OnAppendListener {
-            //do append
-        }
-    ```
+       slideRefreshLayout.onRefreshListener = SlideRefreshLayout.OnRefreshListener {
+           //do refresh
+       }
+       //添加追加监听
+       slideRefreshLayout.onAppendListener = SlideRefreshLayout.OnAppendListener {
+           //do append
+       }
+   ```
 
 ### 效果展示
 竖向列表下滑刷新和上滑加载：
