@@ -20,6 +20,50 @@
    ```
 
 ### 使用
+1. 在xml中声明，`layout_direction`和`layout_slide_type`属性必不可少
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <cn.numeron.sliderefreshlayout.SlideRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/slide_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    
+        <cn.numeron.sliderefreshlayout.SlidingRefreshView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_direction="top"
+            app:layout_slide_type="refresh" />
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    
+        <cn.numeron.sliderefreshlayout.SlidingAppendView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_direction="bottom"
+            app:layout_slide_type="append" />
+    
+    </cn.numeron.sliderefreshlayout.SlideRefreshLayout>
+   ```
+
+2.在`java/kotlin`代码中添加监听事件：
+    ```kotlin
+     slideRefreshLayout.onRefreshListener = SlideRefreshLayout.OnRefreshListener {
+        //do your refresh operation
+     }
+     slideRefreshLayout.onAppendListener = SlideRefreshLayout.OnAppendListener {
+        //do your append operation
+     }
+    
+    ```
+
+### 自定义
 1. 实现你自己的`SlidingView`
     ```kotlin
      class SlidingTextView @JvmOverloads constructor(
@@ -87,18 +131,6 @@
 
    </com.numeron.sliderefreshlayout.SlideRefreshLayout>
    ```
-
-3. 添加监听器
-    ```kotlin
-        //添加刷新监听
-        slideRefreshLayout.onRefreshListener = SlideRefreshLayout.OnRefreshListener {
-            //do refresh
-        }
-        //添加追加监听
-        slideRefreshLayout.onAppendListener = SlideRefreshLayout.OnAppendListener {
-            //do append
-        }
-    ```
 
 ### 效果展示
 竖向列表下滑刷新和上滑加载：

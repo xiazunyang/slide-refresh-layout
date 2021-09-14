@@ -21,6 +21,8 @@ class SlideRefreshLayout @JvmOverloads constructor(
     /** 是否正在处理的状态 */
     private var isProcessing = false
 
+    var message: CharSequence? = null
+
     var isRefresh: Boolean
         get() = isProcessing
         set(value) {
@@ -194,6 +196,26 @@ class SlideRefreshLayout @JvmOverloads constructor(
     /** 移除[OnSlidingListener] */
     fun removeSlidingListener(slidingListener: OnSlidingListener) {
         slidingListeners.remove(slidingListener)
+    }
+
+    fun restoreDelay(duration: Long, message: CharSequence? = null) {
+        val slidingView = processingSlidingView
+        if (slidingView is SlidingView) {
+            if (!message.isNullOrEmpty()) {
+                slidingView.setMessage(message)
+            }
+            val layoutParams = slidingView.layoutParams as LayoutParams
+            val type = layoutParams.type
+            if (type == Type.Refresh) {
+                postDelayed({
+                    isRefresh = false
+                }, duration)
+            } else if (type == Type.Append) {
+                postDelayed({
+                    isAppend = false
+                }, duration)
+            }
+        }
     }
 
     private fun dispatchSliding(type: Type) {
