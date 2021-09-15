@@ -23,37 +23,45 @@
     <attr name="slidingAppendViewStyle" format="reference" />
     <attr name="sliding_append_image" format="reference" />
     <attr name="sliding_append_text" format="string|reference" />
-    <attr name="sliding_append_threshold" format="string|reference" />
+    <attr name="sliding_append_text_threshold" format="string|reference" />
+    <attr name="sliding_append_text_appending" format="string|reference" />
 
     <declare-styleable name="SlidingAppendView">
         <attr name="sliding_append_text" />
         <attr name="sliding_append_image" />
-        <attr name="sliding_append_threshold" />
+        <attr name="sliding_append_text_threshold" />
+        <attr name="sliding_append_text_appending" />
     </declare-styleable>
     <string name="sliding_append_text">上滑加载</string>
-    <string name="sliding_append_threshold">松开立即加载</string>
+    <string name="sliding_append_text_appending">正在加载</string>
+    <string name="sliding_append_text_threshold">松开立即加载</string>
 
     <style name="SlidingAppendViewStyle">
         <item name="sliding_append_text">@string/sliding_append_text</item>
         <item name="sliding_append_image">@drawable/ic_sliding_loading</item>
-        <item name="sliding_append_threshold">@string/sliding_append_threshold</item>
+        <item name="sliding_append_text_threshold">@string/sliding_append_text_threshold</item>
+        <item name="sliding_append_text_appending">@string/sliding_append_text_appending</item>
     </style>
 
     <attr name="slidingRefreshViewStyle" format="reference" />
     <attr name="sliding_refresh_image" format="reference" />
     <attr name="sliding_refresh_text" format="string|reference" />
-    <attr name="sliding_refresh_threshold" format="string|reference" />
+    <attr name="sliding_refresh_text_threshold" format="string|reference" />
+    <attr name="sliding_refresh_text_refreshing" format="string|reference" />
     <declare-styleable name="SlidingRefreshView">
         <attr name="sliding_refresh_text" />
         <attr name="sliding_refresh_image" />
-        <attr name="sliding_refresh_threshold" />
+        <attr name="sliding_refresh_text_threshold" />
+        <attr name="sliding_refresh_text_refreshing" />
     </declare-styleable>
     <string name="sliding_refresh_text">下滑刷新</string>
-    <string name="sliding_refresh_threshold">松开立即刷新</string>
+    <string name="sliding_refresh_text_refreshing">正在刷新</string>
+    <string name="sliding_refresh_text_threshold">松开立即刷新</string>
 
     <style name="SlidingRefreshViewStyle">
         <item name="sliding_refresh_text">@string/sliding_refresh_text</item>
         <item name="sliding_refresh_image">@drawable/ic_sliding_loading</item>
-        <item name="sliding_refresh_threshold">@string/sliding_refresh_threshold</item>
+        <item name="sliding_refresh_text_threshold">@string/sliding_refresh_text_threshold</item>
+        <item name="sliding_refresh_text_refreshing">@string/sliding_refresh_text_refreshing</item>
     </style>
 </resources>

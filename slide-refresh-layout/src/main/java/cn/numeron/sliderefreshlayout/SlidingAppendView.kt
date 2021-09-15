@@ -18,8 +18,9 @@ class SlidingAppendView @JvmOverloads constructor(
     s: Int = R.style.SlidingAppendViewStyle
 ) : FrameLayout(c, a, i, s), SlidingView {
 
-    private var slidingText = "上滑加载"
-    private var thresholdText = "松开立即加载"
+    private var slidingText = c.getText(R.string.sliding_append_text)
+    private var thresholdText = c.getText(R.string.sliding_append_text_threshold)
+    private var appendingText = c.getText(R.string.sliding_append_text_appending)
     private val textView: TextView
     private val imageView: ImageView
 
@@ -47,9 +48,15 @@ class SlidingAppendView @JvmOverloads constructor(
         if (slidingText != null) {
             this.slidingText = slidingText
         }
-        val thresholdText = typedArray.getString(R.styleable.SlidingAppendView_sliding_append_threshold)
+        val thresholdText =
+            typedArray.getString(R.styleable.SlidingAppendView_sliding_append_text_threshold)
         if (thresholdText != null) {
             this.thresholdText = thresholdText
+        }
+        val appendingText =
+            typedArray.getString(R.styleable.SlidingAppendView_sliding_append_text_appending)
+        if (appendingText != null) {
+            this.appendingText = appendingText
         }
 
         typedArray.recycle()
@@ -75,6 +82,7 @@ class SlidingAppendView @JvmOverloads constructor(
 
     override fun onStartSliding(type: Type) {
         imageView.startAnimation(loadingAnimation)
+        textView.text = appendingText
     }
 
     override fun onFinishSliding(type: Type) {

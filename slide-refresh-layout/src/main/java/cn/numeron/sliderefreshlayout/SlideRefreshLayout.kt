@@ -445,7 +445,7 @@ class SlideRefreshLayout @JvmOverloads constructor(
 
         //当滚动状态复位时，则置空processingSlidingView
         if (scrollX == 0 && scrollY == 0) {
-            dispatchFinish(processingType!!)
+            processingType?.let(::dispatchFinish)
             processingSlidingView?.translationX = 0f
             processingSlidingView?.translationY = 0f
             this.tempRect.setEmpty()

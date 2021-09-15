@@ -18,8 +18,9 @@ class SlidingRefreshView @JvmOverloads constructor(
     s: Int = R.style.SlidingRefreshViewStyle
 ) : FrameLayout(c, a, i, s), SlidingView {
 
-    private var slidingText = "下滑刷新"
-    private var thresholdText = "松开立即刷新"
+    private var slidingText = c.getText(R.string.sliding_refresh_text)
+    private var thresholdText = c.getText(R.string.sliding_refresh_text_threshold)
+    private var refreshingText = c.getText(R.string.sliding_refresh_text_refreshing)
     private val textView: TextView
     private val imageView: ImageView
 
@@ -48,9 +49,14 @@ class SlidingRefreshView @JvmOverloads constructor(
             this.slidingText = slidingText
         }
         val thresholdText =
-            typedArray.getString(R.styleable.SlidingRefreshView_sliding_refresh_threshold)
+            typedArray.getString(R.styleable.SlidingRefreshView_sliding_refresh_text_threshold)
         if (thresholdText != null) {
             this.thresholdText = thresholdText
+        }
+        val refreshingText =
+            typedArray.getString(R.styleable.SlidingRefreshView_sliding_refresh_text_refreshing)
+        if (refreshingText != null) {
+            this.refreshingText = refreshingText
         }
         typedArray.recycle()
 
@@ -75,6 +81,7 @@ class SlidingRefreshView @JvmOverloads constructor(
 
     override fun onStartSliding(type: Type) {
         imageView.startAnimation(loadingAnimation)
+        textView.text = refreshingText
     }
 
     override fun onFinishSliding(type: Type) {
