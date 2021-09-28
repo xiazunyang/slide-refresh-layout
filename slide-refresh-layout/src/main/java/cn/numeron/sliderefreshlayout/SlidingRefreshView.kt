@@ -73,11 +73,7 @@ class SlidingRefreshView @JvmOverloads constructor(
         }
     }
 
-    override fun onRestoring(type: Type, distance: Int) {
-        if (loadingAnimation.hasStarted()) {
-            imageView.clearAnimation()
-        }
-    }
+    override fun onRestoring(type: Type, distance: Int) = Unit
 
     override fun onStartSliding(type: Type) {
         imageView.startAnimation(loadingAnimation)
@@ -85,7 +81,8 @@ class SlidingRefreshView @JvmOverloads constructor(
     }
 
     override fun onFinishSliding(type: Type) {
-
+        imageView.clearAnimation()
+        textView.text = slidingText
     }
 
     override fun setMessage(message: CharSequence) {

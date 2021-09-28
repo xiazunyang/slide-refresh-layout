@@ -3,6 +3,7 @@ package cn.numeron.sliderefreshlayout
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Scroller
@@ -302,10 +303,10 @@ class SlideRefreshLayout @JvmOverloads constructor(
     }
 
     private fun allowNestedScrollByAxes(axes: Int): Boolean {
-        return if (axes == ViewCompat.SCROLL_AXIS_VERTICAL) {
-            bound.height() > height
-        } else {
-            bound.width() > width
+        return when (axes) {
+            ViewCompat.SCROLL_AXIS_VERTICAL -> bound.height() > height
+            ViewCompat.SCROLL_AXIS_HORIZONTAL -> bound.width() > width
+            else -> false
         }
     }
 
@@ -337,7 +338,6 @@ class SlideRefreshLayout @JvmOverloads constructor(
                     Direction.Top -> distanceY = dy.coerceAtMost(-scrollY)
                     Direction.Right -> distanceX = dx.coerceAtLeast(-scrollX)
                     Direction.Bottom -> distanceY = dy.coerceAtLeast(-scrollY)
-                    Direction.None -> Unit
                 }
                 //执行滚动，并记录已消耗的距离
                 scrollBy(distanceX, distanceY)
@@ -398,11 +398,10 @@ class SlideRefreshLayout @JvmOverloads constructor(
 
         //计算滚动时需要操作的SlidingView
         when {
-            dyUnconsumed > 0 -> processingSlidingView = bottomSlidingView
-            dyUnconsumed < 0 -> processingSlidingView = topSlidingView
-            dxUnconsumed > 0 -> processingSlidingView = rightSlidingView
-            dxUnconsumed < 0 -> processingSlidingView = leftSlidingView
-            else -> Unit
+            scrollY > 0 -> processingSlidingView = bottomSlidingView
+            scrollY < 0 -> processingSlidingView = topSlidingView
+            scrollX > 0 -> processingSlidingView = rightSlidingView
+            scrollX < 0 -> processingSlidingView = leftSlidingView
         }
     }
 
@@ -524,6 +523,63 @@ class SlideRefreshLayout @JvmOverloads constructor(
         return processingSlidingView != null
     }
 
+    private var lastMotionEventX = 0f
+    private var lastMotionEventY = 0f
+    private var axis = ViewCompat.SCROLL_AXIS_NONE
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val isConsumed = super.onTouchEvent(event)
+        if (!isConsumed && !isProcessing) {
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    lastMotionEventX = event.x
+                    lastMotionEventY = event.y
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val distantX = (event.x - lastMotionEventX).toInt()
+                    val distantY = (event.y - lastMotionEventY).toInt()
+                    lastMotionEventX = event.x
+                    lastMotionEventY = event.y
+
+                    // 判断滑动方向
+                    if (axis == ViewCompat.SCROLL_AXIS_NONE) {
+                        when {
+                            distantX.absoluteValue > distantY.absoluteValue -> {
+                                axis = ViewCompat.SCROLL_AXIS_HORIZONTAL
+                            }
+                            distantX.absoluteValue < distantY.absoluteValue -> {
+                                axis = ViewCompat.SCROLL_AXIS_VERTICAL
+                            }
+                        }
+                    }
+                    if (allowNestedScrollByAxes(axis)) {
+                        //禁止上级布局中途拦截事件
+                        parent?.requestDisallowInterceptTouchEvent(true)
+                        // 执行滚动
+                        when (axis) {
+                            ViewCompat.SCROLL_AXIS_HORIZONTAL -> {
+                                calculateScrollDistance(-distantX, 0)
+                                calculateBeProcessing()
+                            }
+                            ViewCompat.SCROLL_AXIS_VERTICAL -> {
+                                calculateScrollDistance(0, -distantY)
+                                calculateBeProcessing()
+                            }
+                        }
+                    }
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    lastMotionEventX = 0f
+                    lastMotionEventY = 0f
+                    axis = ViewCompat.SCROLL_AXIS_NONE
+                    parent?.requestDisallowInterceptTouchEvent(false)
+                    onStopNestedScroll(this, ViewCompat.TYPE_TOUCH)
+                }
+            }
+        }
+        return true
+    }
+
     private fun findViewByType(type: Type): View {
         repeat(childCount) {
             val childView = getChildAt(it)
@@ -536,11 +592,11 @@ class SlideRefreshLayout @JvmOverloads constructor(
     }
 
     private fun showSlidingView() {
+        //找到需要处理的View
+        processingSlidingView = findViewByType(processingType!!)
+        val layoutParams = processingSlidingView?.layoutParams as LayoutParams
         //处理回调
         dispatchStart(processingType!!)
-        //找到需要处理的View
-        val processingView = findViewByType(processingType!!)
-        val layoutParams = processingView.layoutParams as LayoutParams
         //滚动到该位置
         scrollTo(layoutParams.direction)
     }

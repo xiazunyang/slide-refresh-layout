@@ -2,7 +2,7 @@
 继承自ViewGroup的自定义布局，主要特点是可以在任意方向添加滑动响应视图，用来做下拉刷新和追加数据等功能非常方便，提供SlidingView接口方便扩展自己喜欢的响应视图，欢迎提供更多自定义响应视图。
 
 ### 安装
-当前最新版本：[![](https://jitpack.io/v/cn.numeron/slide-refresh-layout.svg)](https://jitpack.io/#cn.numeron/slide-refresh-layout)
+当前最新版本：[![](https://maven-badges.herokuapp.com/maven-central/cn.numeron/slide-refresh-layout/badge.svg)](https://mvnrepository.com/artifact/cn.numeron/slide-refresh-layout)
 
 1. 在根模块的`build.gradle`的适当位置添加以下代码：
    ```groovy
